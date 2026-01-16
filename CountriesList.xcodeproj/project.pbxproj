@@ -30,7 +30,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		F23CC9E02F1AA13A00444B1E /* Exceptions for "CountriesList" folder in "CountriesList" target */ = {
+		F23CCAEB2F1AB19F00444B1E /* Exceptions for "CountriesList" folder in "CountriesList" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -40,14 +40,6 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		F23CC9BA2F1AA13700444B1E /* CountriesList */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				F23CC9E02F1AA13A00444B1E /* Exceptions for "CountriesList" folder in "CountriesList" target */,
-			);
-			path = CountriesList;
-			sourceTree = "<group>";
-		};
 		F23CC9D12F1AA13A00444B1E /* CountriesListTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = CountriesListTests;
@@ -56,6 +48,14 @@
 		F23CC9DB2F1AA13A00444B1E /* CountriesListUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = CountriesListUITests;
+			sourceTree = "<group>";
+		};
+		F23CCAE52F1AB19F00444B1E /* CountriesList */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F23CCAEB2F1AB19F00444B1E /* Exceptions for "CountriesList" folder in "CountriesList" target */,
+			);
+			path = CountriesList;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -88,7 +88,7 @@
 		F23CC9AF2F1AA13700444B1E = {
 			isa = PBXGroup;
 			children = (
-				F23CC9BA2F1AA13700444B1E /* CountriesList */,
+				F23CCAE52F1AB19F00444B1E /* CountriesList */,
 				F23CC9D12F1AA13A00444B1E /* CountriesListTests */,
 				F23CC9DB2F1AA13A00444B1E /* CountriesListUITests */,
 				F23CC9B92F1AA13700444B1E /* Products */,
@@ -121,7 +121,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				F23CC9BA2F1AA13700444B1E /* CountriesList */,
+				F23CCAE52F1AB19F00444B1E /* CountriesList */,
 			);
 			name = CountriesList;
 			packageProductDependencies = (
