@@ -21,3 +21,27 @@ struct CountryDTO: Codable {
         let symbol: String
     }
 }
+
+extension CountryDTO {
+    func toDomain() -> Country {
+
+        let countryName = name?.common ?? cca2
+        
+        let mappedCurrencies = currencies?.map { code, currencyDTO in
+            Country.Currency(
+                code: code,
+                name: currencyDTO.name,
+                symbol: currencyDTO.symbol
+            )
+        }
+        
+        return Country(
+            id: cca2,
+            name: countryName,
+            capital: capital?.first,
+            flag: flag,
+            currencies: mappedCurrencies
+        )
+    }
+}
+
