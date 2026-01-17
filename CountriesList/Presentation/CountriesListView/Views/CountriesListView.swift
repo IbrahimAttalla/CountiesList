@@ -21,20 +21,26 @@ struct CountriesListView: View {
                 },
                 onClear: {
                     viewModel.searchText = ""
-                    viewModel.countries = []
+                    viewModel.showFavoriteList()
                 }
             )
             
             Divider()
             
-            List(viewModel.countries) { country in
-                Text(country.name)
+            if viewModel.isSearching && viewModel.countries.isEmpty {
+                EmptySearchView {
+                    viewModel.showFavoriteList()
+                }
+            } else {
+                SavedCountriesListView(
+                    savedCountries: $viewModel.countries,
+                    onRemove: viewModel.removeFromFavorites,
+                    onNavigate: viewModel.navigateToCountryDetails,
+                    onAddFavorite: viewModel.addToFavorites
+                )
             }
-
         }
-        .onAppear {
-            viewModel.fetchCountries()
-        }
+        .navigationTitle("Countries List")
     }
     
 }

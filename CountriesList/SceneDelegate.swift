@@ -21,9 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let navigationController = UINavigationController()
 
-        let rootVC = CountriesListRouter.createModule(
-            navigationController: navigationController
-        )
+        let rootVC = CountriesListRouter.createModule()
 
         navigationController.viewControllers = [rootVC]
 

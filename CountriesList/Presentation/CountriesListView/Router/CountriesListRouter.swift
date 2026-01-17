@@ -9,15 +9,13 @@ import SwiftUI
 
 final class CountriesListRouter {
     
-    private weak var navigationController: UINavigationController?
-
+    private weak var viewController: UIViewController?
+    
     enum Route: Hashable {
         case details(country: Country)
     }
 
-    static func createModule(
-        navigationController: UINavigationController
-    ) -> UIViewController {
+    static func createModule() -> UIViewController {
 
         let router = CountriesListRouter()
         
@@ -44,7 +42,8 @@ final class CountriesListRouter {
         let view = CountriesListView(viewModel: viewModel)
 
         let hostingVC = UIHostingController(rootView: view)
-
+        router.viewController = hostingVC
+        
         return hostingVC
     }
 
@@ -53,7 +52,7 @@ final class CountriesListRouter {
         case let .details(country):
            // TODO: navigate to details view through CountryDetails Router
             let countryDetailsView = UIHostingController(rootView: CountryDetailsView())
-            navigationController?.pushViewController(countryDetailsView, animated: true)
+            viewController?.navigationController?.pushViewController(countryDetailsView, animated: true)
         }
     }
 

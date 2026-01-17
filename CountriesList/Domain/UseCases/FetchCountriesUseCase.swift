@@ -13,6 +13,9 @@ protocol FetchCountriesUseCaseProtocol {
     func execute() -> AnyPublisher<[Country], NetworkErrors>
     func fetchCountry(countryCode: String)
     func searchCountry(byName name: String)
+    func addToFavorites(country: Country)
+    func removeFromFavorites(country: Country)
+    func getFavoriteList()
 }
 
 class FetchCountriesUseCase: FetchCountriesUseCaseProtocol {
@@ -46,7 +49,7 @@ class FetchCountriesUseCase: FetchCountriesUseCaseProtocol {
         if let defaultCountry = baseCountriesList.first { $0.id == countryCode} {
             
             let itemAdded = repository.saveFavoriteCountry(defaultCountry)
-            
+            updateBaseCountriesList(defaultCountry.id, isFavorite: true)
             if itemAdded {
                 filteredCountriesSubject.send(repository.getFavoriteCountries()) 
             }
@@ -59,6 +62,32 @@ class FetchCountriesUseCase: FetchCountriesUseCaseProtocol {
         } else {
             let filtered = baseCountriesList.search(by: name)
             filteredCountriesSubject.send(filtered)
+        }
+    }
+    
+    func addToFavorites(country: Country) {
+        let isAdded = repository.saveFavoriteCountry(country)
+        updateBaseCountriesList(country.id, isFavorite: true)
+        if isAdded {
+            filteredCountriesSubject.send(repository.getFavoriteCountries())
+        }
+    }
+    
+    func removeFromFavorites(country: Country) {
+        _ = repository.deleteFavoriteCountry(country)
+        updateBaseCountriesList(country.id, isFavorite: false)
+        filteredCountriesSubject.send(repository.getFavoriteCountries())
+    }
+    
+    func getFavoriteList() {
+        filteredCountriesSubject.send(repository.getFavoriteCountries())
+    }
+
+    private func updateBaseCountriesList(_ id: String, isFavorite: Bool) {
+        if let index = baseCountriesList.firstIndex(where: { $0.id == id }) {
+            var updated = baseCountriesList[index]
+            updated.isFavorite = isFavorite
+            baseCountriesList[index] = updated
         }
     }
 

@@ -25,6 +25,8 @@ struct SearchBarView: View {
                     .onSubmit {
                         if !searchText.isEmpty {
                             onSearch()
+                            searchText = ""
+                            isSearchFocused = false
                         }
                     }
                 
@@ -41,7 +43,11 @@ struct SearchBarView: View {
             .cornerRadius(10)
             
             // Search Button
-            Button(action: onSearch) {
+            Button(action: {
+                guard !searchText.isEmpty else { return }
+                onSearch()
+                isSearchFocused = false
+            }) {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.white)
                     .font(.system(size: 16, weight: .semibold))
@@ -67,12 +73,9 @@ struct SearchBarView: View {
         SearchBarView(
             searchText: $searchText,
             isSearchFocused: $isFocused,
-            onSearch: {
-                print("Search tapped with text:", searchText)
-            },
+            onSearch: {},
             onClear: {
                 searchText = ""
-                print("Clear tapped")
             }
         )
         Spacer()

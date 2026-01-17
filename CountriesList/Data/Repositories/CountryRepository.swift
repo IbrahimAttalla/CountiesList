@@ -44,10 +44,13 @@ final class CountryRepository: CountryRepositoryProtocol {
         localDataSource.addFavorite(country)
     }
     
+    func deleteFavoriteCountry(_ country: Country) {
+        localDataSource.removeFavorite(country)
+    }
+    
     func getFavoriteCountries() -> [Country] {
         localDataSource.getFavorites()
     }
     
-
     
 }

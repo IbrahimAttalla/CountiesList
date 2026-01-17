@@ -11,9 +11,11 @@ import Combine
 final class CountriesListViewModel: ObservableObject {
     
     @Published var countries: [Country] = []
-    @Published var isLoading = false
-    @Published var errorMessage: String?
     @Published var searchText: String = ""
+    
+    var isSearching: Bool {
+            !searchText.isEmpty
+        }
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -28,6 +30,7 @@ final class CountriesListViewModel: ObservableObject {
         self.countriesUseCase = countriesUseCase
         self.locationServices = locationServices
         bind()
+        fetchCountries()
     }
     
     // MARK: - Bind Publishers
@@ -36,31 +39,18 @@ final class CountriesListViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] countries in
                 self?.countries = countries
-                print("filtered Countries", countries)
             }
             .store(in: &cancellables)
     }
     
     func fetchCountries() {
-        isLoading = true
-        errorMessage = nil
         
         countriesUseCase.execute()
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] completion in
-                guard let self else { return }
-                self.isLoading = false
-                
-                switch completion {
-                case .finished:
-                    break
-                    
-                case .failure(let error):
-                    self.errorMessage = error.localizedDescription
-                }
+            .sink { completion in
+                if case .failure = completion {}
             } receiveValue: { [weak self] countries in
                 self?.loadDefaultCountry()
-                // TODO: get user location and set it's country first
             }
             .store(in: &cancellables)
     }
@@ -72,7 +62,6 @@ final class CountriesListViewModel: ObservableObject {
                 receiveCompletion: { completion in
                     if case .failure = completion {}
                 }, receiveValue: { countryCode in
-                    print("countryCode", countryCode)
                     self.countriesUseCase.fetchCountry(countryCode: countryCode)
                 }
             )
@@ -84,9 +73,25 @@ final class CountriesListViewModel: ObservableObject {
         countriesUseCase.searchCountry(byName: searchText)
     }
     
-    func didSelectMovie(_ selectedCountry: Country) {
+    func removeFromFavorites(_ country: Country) {
+        searchText = ""
+        countriesUseCase.removeFromFavorites(country: country)
+    }
+    
+    func addToFavorites(_ country: Country) {
+        searchText = ""
+        countriesUseCase.addToFavorites(country: country)
+    }
+    
+    func showFavoriteList(){
+        searchText = ""
+        countriesUseCase.getFavoriteList()
+    }
+    
+    func navigateToCountryDetails(_ country: Country) {
         router.navigate(
-            to: .details(country: selectedCountry)
+            to: .details(country: country)
         )
     }
+    
 }
