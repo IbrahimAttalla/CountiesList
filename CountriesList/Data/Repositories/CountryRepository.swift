@@ -40,4 +40,14 @@ final class CountryRepository: CountryRepositoryProtocol {
         }
     }
     
+    func saveFavoriteCountry(_ country: Country) -> Bool {
+        localDataSource.addFavorite(country)
+    }
+    
+    func getFavoriteCountries() -> [Country] {
+        localDataSource.getFavorites()
+    }
+    
+
+    
 }

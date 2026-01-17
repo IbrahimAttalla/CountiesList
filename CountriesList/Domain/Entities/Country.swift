@@ -5,7 +5,7 @@
 //  Created by Ibrahim Saber on 16/01/2026.
 //
 
-struct Country: Equatable, Hashable, Codable {
+struct Country: Identifiable, Equatable, Hashable, Codable {
     
     let id: String
     let name: String

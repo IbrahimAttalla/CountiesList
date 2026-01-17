@@ -8,18 +8,33 @@
 import SwiftUI
 
 struct CountriesListView: View {
-    @StateObject private var viewModel: CountriesListViewModel
-    
-    init(viewModel: CountriesListViewModel) {
-        _viewModel = StateObject(wrappedValue: viewModel)
-    }
-    
+    @ObservedObject var viewModel: CountriesListViewModel
+    @FocusState private var isSearchFocused: Bool
     
     var body: some View {
-        Text("Countries List View")
-            .onAppear {
-                viewModel.fetchCountries()
+        VStack(spacing: 0) {
+            SearchBarView(
+                searchText: $viewModel.searchText,
+                isSearchFocused: $isSearchFocused,
+                onSearch: {
+                    viewModel.searchCountries()
+                },
+                onClear: {
+                    viewModel.searchText = ""
+                    viewModel.countries = []
+                }
+            )
+            
+            Divider()
+            
+            List(viewModel.countries) { country in
+                Text(country.name)
             }
+
+        }
+        .onAppear {
+            viewModel.fetchCountries()
+        }
     }
     
 }
@@ -33,7 +48,8 @@ struct CountriesListView: View {
                     countriesListRemoteService: CountriesListRemoteService(),
                     countriesListLocalServices: CountriesListLocalServices()
                 )
-            )
+            ),
+            locationServices: LocationService()
         )
     )
 }

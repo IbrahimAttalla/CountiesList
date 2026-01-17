@@ -28,10 +28,18 @@ final class CountriesListRouter {
             countriesListRemoteService: remoteService,
             countriesListLocalServices: localService
         )
+       
+        let locationService: LocationServiceProtocol = LocationService()
+
+        let countriesUseCase: FetchCountriesUseCaseProtocol = FetchCountriesUseCase(
+            repository: countriesRepository
+        )
         
-        let countriesUseCase: FetchCountriesUseCaseProtocol = FetchCountriesUseCase(repository: countriesRepository)
-        
-        let viewModel = CountriesListViewModel(router: router, countriesUseCase: countriesUseCase)
+        let viewModel = CountriesListViewModel(
+            router: router,
+            countriesUseCase: countriesUseCase,
+            locationServices: locationService
+        )
 
         let view = CountriesListView(viewModel: viewModel)
 
