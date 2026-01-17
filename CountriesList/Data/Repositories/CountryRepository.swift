@@ -11,14 +11,26 @@ import Combine
 final class CountryRepository: CountryRepositoryProtocol {
     
     private let remoteDataSource: CountriesListRemoteServiceProtocol
+    private let localDataSource: CountriesListLocalServicesProtocol
     
-    init(CountriesListRemoteService: CountriesListRemoteServiceProtocol) {
-        self.remoteDataSource = CountriesListRemoteService
+    init(countriesListRemoteService: CountriesListRemoteServiceProtocol,
+         countriesListLocalServices: CountriesListLocalServicesProtocol ) {
+        remoteDataSource = countriesListRemoteService
+        localDataSource = countriesListLocalServices
     }
     
     func getAllCountries() -> AnyPublisher<[Country], NetworkErrors> {
-        remoteDataSource.fetchCountiesList()
-            .map { $0.map { $0.toDomain() } }
-            .eraseToAnyPublisher()
+        let isOnline = true
+
+        if isOnline && !localDataSource.hasSavedData() {
+            return remoteDataSource.fetchCountiesList()
+                .map { $0.map { $0.toDomain() } }
+                .eraseToAnyPublisher()
+        } else {
+            return Just(localDataSource.fetchSavedList())
+                .setFailureType(to: NetworkErrors.self)
+                .eraseToAnyPublisher()
+        }
     }
+    
 }

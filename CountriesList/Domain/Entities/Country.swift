@@ -11,6 +11,7 @@ struct Country: Codable {
     let capital: String?
     let flag: String?
     let currencies: [Currency]?
+    var isFavorite: Bool = false
     
     struct Currency: Codable {
         let code: String
