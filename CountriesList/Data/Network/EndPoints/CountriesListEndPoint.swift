@@ -15,12 +15,17 @@ extension CountriesListEndPoint {
     var path: String {
         switch self {
         case .fetchCountiesList:
-            return "/all?fields=name,capital,currencies,cca2,flag"
+            return "/all"
         }
     }
     
     var queryParameters: [String : String?] {
-        [:]
+        switch self {
+        case .fetchCountiesList:
+            return [
+                "fields": "name,capital,currencies,cca2,flag"
+            ]
+        }
     }
     
     var headers: [String : String] {

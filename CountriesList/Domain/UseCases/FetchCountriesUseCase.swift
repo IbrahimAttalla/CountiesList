@@ -1,5 +1,5 @@
 //
-//  GetCountriesUseCase.swift
+//  FetchCountriesUseCase.swift
 //  CountriesList
 //
 //  Created by Ibrahim Saber on 16/01/2026.
@@ -7,7 +7,11 @@
 import Foundation
 import Combine
 
-class GetCountriesUseCase {
+protocol FetchCountriesUseCaseProtocol {
+    func execute() -> AnyPublisher<[Country], NetworkErrors>
+}
+
+class FetchCountriesUseCase: FetchCountriesUseCaseProtocol {
     private let repository: CountryRepositoryProtocol
     
     init(repository: CountryRepositoryProtocol) {

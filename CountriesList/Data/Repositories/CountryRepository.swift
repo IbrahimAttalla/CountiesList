@@ -20,11 +20,18 @@ final class CountryRepository: CountryRepositoryProtocol {
     }
     
     func getAllCountries() -> AnyPublisher<[Country], NetworkErrors> {
-        let isOnline = true
-
-        if isOnline && !localDataSource.hasSavedData() {
+        
+        if !localDataSource.hasSavedData() {
             return remoteDataSource.fetchCountiesList()
-                .map { $0.map { $0.toDomain() } }
+                .map { [weak self] remoteCountries in
+                    let countries = remoteCountries.map { $0.toDomain() }
+                    _ = self?.localDataSource.saveFullList(countries)
+                    
+                    return countries
+                }
+                .mapError { error in
+                    return error
+                }
                 .eraseToAnyPublisher()
         } else {
             return Just(localDataSource.fetchSavedList())
