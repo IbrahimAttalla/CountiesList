@@ -19,14 +19,14 @@ protocol FetchCountriesUseCaseProtocol {
 }
 
 class FetchCountriesUseCase: FetchCountriesUseCaseProtocol {
-  
+    
     var baseCountriesList: [Country] = []
     
     private let filteredCountriesSubject = CurrentValueSubject<[Country], Never>([])
     
     var filteredCountriesPublisher: AnyPublisher<[Country], Never> {
-            filteredCountriesSubject.eraseToAnyPublisher()
-        }
+        filteredCountriesSubject.eraseToAnyPublisher()
+    }
     
     private let repository: CountryRepositoryProtocol
     
@@ -42,17 +42,14 @@ class FetchCountriesUseCase: FetchCountriesUseCaseProtocol {
                 return countries
             }
             .eraseToAnyPublisher()
-
+        
     }
     
     func fetchCountry(countryCode: String) {
         if let defaultCountry = baseCountriesList.first { $0.id == countryCode} {
-            
-            let itemAdded = repository.saveFavoriteCountry(defaultCountry)
+            _ = repository.saveFavoriteCountry(defaultCountry)
             updateBaseCountriesList(defaultCountry.id, isFavorite: true)
-            if itemAdded {
-                filteredCountriesSubject.send(repository.getFavoriteCountries()) 
-            }
+            filteredCountriesSubject.send(repository.getFavoriteCountries())
         }
     }
     
@@ -66,11 +63,9 @@ class FetchCountriesUseCase: FetchCountriesUseCaseProtocol {
     }
     
     func addToFavorites(country: Country) {
-        let isAdded = repository.saveFavoriteCountry(country)
+        _ = repository.saveFavoriteCountry(country)
         updateBaseCountriesList(country.id, isFavorite: true)
-        if isAdded {
-            filteredCountriesSubject.send(repository.getFavoriteCountries())
-        }
+        filteredCountriesSubject.send(repository.getFavoriteCountries())
     }
     
     func removeFromFavorites(country: Country) {
@@ -82,7 +77,7 @@ class FetchCountriesUseCase: FetchCountriesUseCaseProtocol {
     func getFavoriteList() {
         filteredCountriesSubject.send(repository.getFavoriteCountries())
     }
-
+    
     private func updateBaseCountriesList(_ id: String, isFavorite: Bool) {
         if let index = baseCountriesList.firstIndex(where: { $0.id == id }) {
             var updated = baseCountriesList[index]
@@ -90,5 +85,5 @@ class FetchCountriesUseCase: FetchCountriesUseCaseProtocol {
             baseCountriesList[index] = updated
         }
     }
-
+    
 }

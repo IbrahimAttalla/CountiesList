@@ -50,8 +50,7 @@ final class CountriesListRouter {
     func navigate(to route: Route) {
         switch route {
         case let .details(country):
-           // TODO: navigate to details view through CountryDetails Router
-            let countryDetailsView = UIHostingController(rootView: CountryDetailsView())
+            let countryDetailsView = UIHostingController(rootView: CountryDetailsView(country: country))
             viewController?.navigationController?.pushViewController(countryDetailsView, animated: true)
         }
     }
