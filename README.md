@@ -3,6 +3,8 @@
 A SwiftUI iOS app to browse countries, view details, search, and manage favorites.  
 Built with Clean Architecture, SwiftData persistence, and Combine.
 
+You can check the closed PR for this feature here: [View PR](https://github.com/IbrahimAttalla/CountiesList/pull/1)
+
 ## Features
 - Browse countries list
 - View country details
